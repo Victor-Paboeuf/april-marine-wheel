@@ -103,6 +103,7 @@ html, body {
   width: min(94vw, calc(100dvh - 210px), 1000px);
   aspect-ratio: 1;
   flex: 0 0 auto;
+  margin-top: -200px;
 }
 
 .glow-ring {
