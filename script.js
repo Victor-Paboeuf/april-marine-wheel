@@ -448,12 +448,12 @@ resizeBgCanvas();
 function initBgParticles() {
   bgParticles = [];
   const colors = ["98,157,48", "246,169,54"]; // vert / orange
-  const count = Math.floor((bgCanvas.width * bgCanvas.height) / 18000);
+  const count = Math.floor((bgCanvas.width * bgCanvas.height) / 60000);
   for (let i = 0; i < count; i++) {
     bgParticles.push({
       x: Math.random() * bgCanvas.width,
       y: Math.random() * bgCanvas.height,
-      r: Math.random() * 100 + 0.4,
+      r: Math.random() * 150 + 0.4,
       vx: (Math.random() - 0.5) * 0.15,
       vy: (Math.random() - 0.5) * 0.15,
       alpha: Math.random() * 0.6 + 0.2,
