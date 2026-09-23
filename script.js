@@ -1,11 +1,11 @@
 /* ===================== ÉTAT ===================== */
 const DEFAULT_SEGMENTS = [
-  { label: "🎁 Paddle", weight: 1 },
-  { label: "👕 Veste", weight: 1 },
-  { label: "💰 Jackpot", weight: 1 },
-  { label: "🎯 Mug", weight: 1 },
-  { label: "🍀 Porte-clés", weight: 1 },
-  { label: "🔥 Chandail", weight: 1 },
+  { label: "?? Paddle", weight: 1 },
+  { label: "🕶️ Lunettes de soleil", weight: 1 },
+  { label: "🛟 Bouée", weight: 1 },
+  { label: "☕ Mug", weight: 1 },
+  { label: "⚓ Porte-clés", weight: 1 },
+  { label: "👕 Chandail", weight: 1 },
 ];
 
 // Réglages fixes (non configurables par l'utilisateur)
@@ -176,10 +176,20 @@ function drawWheel() {
     ctx.save();
     ctx.translate(cx, cy);
     ctx.rotate(mid);
-    ctx.textAlign = "right";
+    ctx.textAlign = "center";
     ctx.fillStyle = getContrastColor(color);
-    ctx.font = "bold " + Math.max(13, Math.min(22, 300 / state.segments.length)) + "px 'Segoe UI', sans-serif";
-    ctx.fillText(seg.label, radius - 48, 6);
+    const fontSize = Math.max(13, Math.min(22, 300 / state.segments.length));
+    ctx.font = "bold " + fontSize + "px 'Segoe UI', sans-serif";
+
+    const textX = radius - 48;
+    const maxTextWidth = Math.max(60, textX - 66); // espace dispo avant le moyeu
+    const lines = wrapText(ctx, seg.label, maxTextWidth);
+    const lineHeight = fontSize * 1.15;
+    const centerX = textX - maxTextWidth / 2; // centre du texte dans l'espace disponible
+    lines.forEach((line, li) => {
+      const y = 6 + (li - (lines.length - 1) / 2) * lineHeight;
+      ctx.fillText(line, centerX, y);
+    });
     ctx.restore();
 
     startAngle = endAngle;
@@ -196,6 +206,48 @@ function drawWheel() {
   ctx.strokeStyle = "rgba(255,255,255,.15)";
   ctx.lineWidth = 3;
   ctx.stroke();
+}
+
+// Découpe un texte en plusieurs lignes pour qu'il tienne dans maxWidth (canvas 2D).
+// Découpe d'abord par mots ; si un mot seul dépasse maxWidth, il est coupé caractère par caractère.
+function wrapText(ctx, text, maxWidth) {
+  const words = String(text).split(/\s+/).filter(Boolean);
+  if (words.length === 0) return [""];
+  const lines = [];
+  let line = "";
+
+  const pushLongWord = (word) => {
+    let chunk = "";
+    for (const ch of word) {
+      const test = chunk + ch;
+      if (ctx.measureText(test).width > maxWidth && chunk) {
+        lines.push(chunk);
+        chunk = ch;
+      } else {
+        chunk = test;
+      }
+    }
+    return chunk;
+  };
+
+  words.forEach((word) => {
+    const test = line ? line + " " + word : word;
+    if (ctx.measureText(test).width <= maxWidth) {
+      line = test;
+      return;
+    }
+    if (line) {
+      lines.push(line);
+      line = "";
+    }
+    if (ctx.measureText(word).width > maxWidth) {
+      line = pushLongWord(word);
+    } else {
+      line = word;
+    }
+  });
+  if (line) lines.push(line);
+  return lines;
 }
 
 function getContrastColor(color) {
