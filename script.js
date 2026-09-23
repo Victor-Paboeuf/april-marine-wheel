@@ -118,9 +118,10 @@ function totalWeight() {
 }
 
 // Couleur générée automatiquement pour chaque segment (non personnalisable)
-function colorForIndex(i, total) {
-  const hue = Math.round((360 / total) * i);
-  return `hsl(${hue}, 68%, 54%)`;
+// Alterne entre orange, vert et blanc.
+const WHEEL_COLORS = ["#f6a936", "#629d30", "#ffffff"];
+function colorForIndex(i) {
+  return WHEEL_COLORS[i % WHEEL_COLORS.length];
 }
 
 function drawWheel() {
@@ -130,13 +131,12 @@ function drawWheel() {
   ctx.clearRect(0, 0, size, size);
 
   const total = totalWeight();
-  const count = state.segments.length;
   let startAngle = rotation;
 
   state.segments.forEach((seg, i) => {
     const angle = (seg.weight / total) * Math.PI * 2;
     const endAngle = startAngle + angle;
-    const color = colorForIndex(i, count);
+    const color = colorForIndex(i);
 
     // segment
     ctx.beginPath();
@@ -147,8 +147,8 @@ function drawWheel() {
     ctx.fill();
 
     // séparateur
-    ctx.strokeStyle = "rgba(255,255,255,.25)";
-    ctx.lineWidth = 2;
+    ctx.strokeStyle = "rgba(0,36,58,.45)";
+    ctx.lineWidth = 3;
     ctx.stroke();
 
     // texte
@@ -180,11 +180,19 @@ function drawWheel() {
   ctx.stroke();
 }
 
-function getContrastColor(hslColor) {
-  // extrait la luminosité du hsl(h, s%, l%) pour choisir un texte clair ou sombre
-  const match = /hsl\(\s*[\d.]+,\s*[\d.]+%,\s*([\d.]+)%\s*\)/.exec(hslColor);
-  const lightness = match ? parseFloat(match[1]) : 50;
-  return lightness >= 55 ? "#111" : "#fff";
+function getContrastColor(color) {
+  // extrait la luminosité (hsl ou hex) pour choisir un texte clair ou sombre
+  const hslMatch = /hsl\(\s*[\d.]+,\s*[\d.]+%,\s*([\d.]+)%\s*\)/.exec(color);
+  if (hslMatch) {
+    return parseFloat(hslMatch[1]) >= 55 ? "#111" : "#fff";
+  }
+  const hexMatch = /^#([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i.exec(color);
+  if (hexMatch) {
+    const [r, g, b] = hexMatch.slice(1).map((h) => parseInt(h, 16));
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return luminance >= 0.6 ? "#111" : "#fff";
+  }
+  return "#fff";
 }
 
 /* ===================== LUMIÈRES AUTOUR DE LA ROUE ===================== */
@@ -332,7 +340,7 @@ function finishSpin(winnerIndex) {
   wheelWrapper.classList.remove("spinning");
 
   const winner = state.segments[winnerIndex];
-  const winnerColor = colorForIndex(winnerIndex, state.segments.length);
+  const winnerColor = colorForIndex(winnerIndex);
 
   // effets woah
   playFanfare();
