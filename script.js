@@ -1,6 +1,6 @@
 /* ===================== ÉTAT ===================== */
 const DEFAULT_SEGMENTS = [
-  { label: "?? Paddle", weight: 1 },
+  { label: "🏄 Paddle", weight: 1 },
   { label: "🕶️ Lunettes de soleil", weight: 1 },
   { label: "🛟 Bouée", weight: 1 },
   { label: "☕ Mug", weight: 1 },
