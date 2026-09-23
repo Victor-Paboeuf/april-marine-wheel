@@ -37,7 +37,6 @@ const canvas = document.getElementById("wheelCanvas");
 const ctx = canvas.getContext("2d");
 const wheelWrapper = document.getElementById("wheelWrapper");
 const spinBtn = document.getElementById("spinBtn");
-const resultText = document.getElementById("resultText");
 const segmentsList = document.getElementById("segmentsList");
 const lightsEl = document.getElementById("lights");
 const flashOverlay = document.getElementById("flashOverlay");
@@ -110,10 +109,6 @@ document.getElementById("resetBtn").addEventListener("click", () => {
   save();
   renderSegments();
 });
-
-function flashMessage(msg) {
-  resultText.textContent = msg;
-}
 
 /* ===================== WHEEL DRAWING ===================== */
 let rotation = 0; // radians actuels de la roue
@@ -277,7 +272,6 @@ spinBtn.addEventListener("click", () => {
   spinning = true;
   spinBtn.disabled = true;
   wheelWrapper.classList.add("spinning");
-  resultText.textContent = "La roue tourne… 🌀";
 
   const winnerIndex = pickWinnerIndex();
   const targetMid = angleForIndex(winnerIndex);
@@ -339,7 +333,6 @@ function finishSpin(winnerIndex) {
 
   const winner = state.segments[winnerIndex];
   const winnerColor = colorForIndex(winnerIndex, state.segments.length);
-  resultText.innerHTML = `🎉 Résultat : <strong style="color:${winnerColor}">${winner.label}</strong>`;
 
   // effets woah
   playFanfare();

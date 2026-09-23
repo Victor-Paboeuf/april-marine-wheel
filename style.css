@@ -94,7 +94,7 @@ html, body {
   border-radius: 50%;
   background: conic-gradient(from 0deg, #004161, #639e30, #f7aa36, #004161);
   filter: blur(30px);
-  opacity: .55;
+  opacity: 1;
   animation: spinGlow 8s linear infinite;
   z-index: 0;
 }
@@ -136,7 +136,7 @@ html, body {
   height: 100%;
   border-radius: 50%;
   box-shadow:
-    0 0 0 8px #00243a,
+    0 0 0 8px #0a3c5e,
     0 0 0 12px rgba(255,255,255,.06),
     0 20px 60px rgba(0,0,0,.6);
   transition: filter .2s;
@@ -171,8 +171,8 @@ html, body {
   width: 110px;
   height: 110px;
   border-radius: 50%;
-  border: 4px solid #00283d;
-  background: radial-gradient(circle at 35% 30%, #ffe08a, #f7aa36 55%, #639e30 100%);
+  border: 4px solid #0a3c5e;
+  background: radial-gradient(circle at 35% 30%, #ffffff, #f73636 55%, #ff0000 100%);
   color: #1a2b0e;
   font-weight: 800;
   letter-spacing: 1px;
@@ -232,7 +232,7 @@ html, body {
   height: 56px;
   border-radius: 50%;
   border: 1px solid rgba(255,255,255,.15);
-  background: linear-gradient(135deg, #004161, #639e30, #f7aa36);
+  background: linear-gradient(135deg, #0a3c5e, #639e30, #f7aa36);
   color: white;
   display: flex;
   align-items: center;
