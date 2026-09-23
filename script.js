@@ -151,11 +151,10 @@ function drawWheel() {
   const cx = radius, cy = radius;
   ctx.clearRect(0, 0, size, size);
 
-  const total = totalWeight();
+  const angle = (Math.PI * 2) / state.segments.length;
   let startAngle = rotation;
 
   state.segments.forEach((seg, i) => {
-    const angle = (seg.weight / total) * Math.PI * 2;
     const endAngle = startAngle + angle;
     const color = colorForIndex(i);
 
@@ -287,11 +286,8 @@ function pickWinnerIndex() {
 }
 
 function angleForIndex(index) {
-  const total = totalWeight();
-  let start = 0;
-  for (let i = 0; i < index; i++) start += state.segments[i].weight;
-  const segAngle = (state.segments[index].weight / total) * Math.PI * 2;
-  return start / total * Math.PI * 2 + segAngle / 2; // milieu du segment (angle relatif, sans rotation)
+  const angle = (Math.PI * 2) / state.segments.length;
+  return index * angle + angle / 2; // milieu visuel du segment (angle relatif, sans rotation)
 }
 
 spinBtn.addEventListener("click", () => {
@@ -344,13 +340,8 @@ spinBtn.addEventListener("click", () => {
 });
 
 function segmentAtAngle(angle) {
-  const total = totalWeight();
-  let acc = 0;
-  for (let i = 0; i < state.segments.length; i++) {
-    acc += (state.segments[i].weight / total) * Math.PI * 2;
-    if (angle <= acc) return i;
-  }
-  return state.segments.length - 1;
+  const segmentAngle = (Math.PI * 2) / state.segments.length;
+  return Math.min(Math.floor(angle / segmentAngle), state.segments.length - 1);
 }
 
 function finishSpin(winnerIndex) {
