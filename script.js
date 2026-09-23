@@ -1,6 +1,6 @@
 /* ===================== ÉTAT ===================== */
 const DEFAULT_SEGMENTS = [
-  { label: "🏄 Paddle", weight: 1 },
+  { label: "?? Paddle", weight: 1 },
   { label: "🕶️ Lunettes de soleil", weight: 1 },
   { label: "🛟 Bouée", weight: 1 },
   { label: "☕ Mug", weight: 1 },
@@ -367,6 +367,8 @@ spinBtn.addEventListener("click", () => {
   const startRotation = rotation;
   const startTime = performance.now();
   let lastTickSegment = -1;
+  let lastRotationForDroplets = rotation;
+  let lastFrameTime = startTime;
 
   function frame(now) {
     const elapsed = now - startTime;
@@ -374,6 +376,13 @@ spinBtn.addEventListener("click", () => {
     const eased = t < 1 ? 1 - Math.pow(1 - t, 4) : 1; // ease-out quart pour ralentissement doux
     rotation = startRotation + totalRotation * eased;
     drawWheel();
+
+    // gouttelettes d'eau projetées selon la vitesse angulaire
+    const dt = Math.max(1, now - lastFrameTime);
+    const angularSpeed = (rotation - lastRotationForDroplets) / dt; // rad / ms
+    spawnDroplets(angularSpeed);
+    lastRotationForDroplets = rotation;
+    lastFrameTime = now;
 
     // tick sound quand on change de segment
     const modRot = ((rotation % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
@@ -432,6 +441,111 @@ closeWinnerBtn.addEventListener("click", () => winnerModal.classList.remove("sho
 winnerModal.addEventListener("click", (e) => {
   if (e.target === winnerModal) winnerModal.classList.remove("show");
 });
+
+/* ===================== GOUTTELETTES D'EAU ===================== */
+const dropletsCanvas = document.getElementById("dropletsCanvas");
+const dctx = dropletsCanvas.getContext("2d");
+let dropletParticles = [];
+let dropletsAnimId = null;
+const MAX_DROPLETS = 260;
+
+function resizeDropletsCanvas() {
+  dropletsCanvas.width = window.innerWidth;
+  dropletsCanvas.height = window.innerHeight;
+}
+window.addEventListener("resize", resizeDropletsCanvas);
+resizeDropletsCanvas();
+
+const WATER_COLORS = [
+  "rgba(180,225,255,0.95)",
+  "rgba(120,195,240,0.9)",
+  "rgba(210,240,255,0.9)",
+  "rgba(60,150,210,0.85)",
+];
+
+// Émet des gouttelettes projetées depuis le pourtour de la roue en fonction de la vitesse angulaire.
+function spawnDroplets(angularSpeed) {
+  const speed = Math.abs(angularSpeed); // rad / ms
+  if (speed < 0.0006) return; // trop lent, pas d'éclaboussures
+
+  const rect = canvas.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  const radius = rect.width / 2;
+  const dir = angularSpeed >= 0 ? 1 : -1;
+
+  // nombre de gouttes proportionnel à la vitesse (plafonné)
+  const count = Math.min(6, Math.round(speed * 2500));
+  for (let i = 0; i < count; i++) {
+    if (dropletParticles.length >= MAX_DROPLETS) break;
+    const angle = Math.random() * Math.PI * 2;
+    const rim = radius - Math.random() * 10;
+    const px = cx + Math.cos(angle) * rim;
+    const py = cy + Math.sin(angle) * rim;
+
+    // vitesse tangentielle (sens de rotation) + un peu de radial vers l'extérieur
+    const tangentX = -Math.sin(angle) * dir;
+    const tangentY = Math.cos(angle) * dir;
+    const radialX = Math.cos(angle);
+    const radialY = Math.sin(angle);
+    const speedFactor = Math.min(18, speed * 4500) * (0.6 + Math.random() * 0.6);
+
+    dropletParticles.push({
+      x: px,
+      y: py,
+      vx: tangentX * speedFactor + radialX * speedFactor * 0.35,
+      vy: tangentY * speedFactor + radialY * speedFactor * 0.35,
+      size: Math.random() * 3 + 2,
+      color: WATER_COLORS[Math.floor(Math.random() * WATER_COLORS.length)],
+      life: 0,
+      maxLife: 40 + Math.random() * 30,
+      gravity: 0.35 + Math.random() * 0.25,
+    });
+  }
+  if (!dropletsAnimId) dropletsLoop();
+}
+
+function dropletsLoop() {
+  dctx.clearRect(0, 0, dropletsCanvas.width, dropletsCanvas.height);
+  dropletParticles.forEach((p) => {
+    p.vy += p.gravity;
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life++;
+    const alpha = Math.max(0, 1 - p.life / p.maxLife);
+    const speedMag = Math.hypot(p.vx, p.vy);
+    const stretch = Math.min(3, 1 + speedMag / 10);
+    const angle = Math.atan2(p.vy, p.vx);
+
+    dctx.save();
+    dctx.translate(p.x, p.y);
+    dctx.rotate(angle);
+    dctx.scale(stretch, 1);
+    dctx.globalAlpha = alpha;
+
+    // corps de la goutte
+    dctx.beginPath();
+    dctx.arc(0, 0, p.size, 0, Math.PI * 2);
+    dctx.fillStyle = p.color;
+    dctx.fill();
+
+    // reflet spéculaire
+    dctx.beginPath();
+    dctx.arc(-p.size * 0.3, -p.size * 0.3, p.size * 0.35, 0, Math.PI * 2);
+    dctx.fillStyle = "rgba(255,255,255,0.85)";
+    dctx.fill();
+
+    dctx.restore();
+  });
+  dropletParticles = dropletParticles.filter(
+    (p) => p.life < p.maxLife && p.y < dropletsCanvas.height + 50
+  );
+  if (dropletParticles.length > 0) {
+    dropletsAnimId = requestAnimationFrame(dropletsLoop);
+  } else {
+    dropletsAnimId = null;
+  }
+}
 
 /* ===================== CONFETTIS ===================== */
 const confettiCanvas = document.getElementById("confettiCanvas");

@@ -427,6 +427,13 @@ html, body {
 .panel-actions .btn { flex: 1; }
 
 /* ------- OVERLAYS ------- */
+#dropletsCanvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
 #confettiCanvas {
   position: fixed;
   inset: 0;
