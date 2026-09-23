@@ -46,6 +46,7 @@ const closeWinnerBtn = document.getElementById("closeWinnerBtn");
 const settingsBtn = document.getElementById("settingsBtn");
 const settingsModal = document.getElementById("settingsModal");
 const closeSettingsBtn = document.getElementById("closeSettingsBtn");
+const fullscreenBtn = document.getElementById("fullscreenBtn");
 
 /* ===================== MODALE PARAMÈTRES ===================== */
 settingsBtn.addEventListener("click", () => {
@@ -55,6 +56,26 @@ closeSettingsBtn.addEventListener("click", () => settingsModal.classList.remove(
 settingsModal.addEventListener("click", (e) => {
   if (e.target === settingsModal) settingsModal.classList.remove("show");
 });
+
+/* ===================== PLEIN ÉCRAN ===================== */
+const ICON_ENTER_FULLSCREEN = `<path d="M8 3H5a2 2 0 0 0-2 2v3"></path><path d="M21 8V5a2 2 0 0 0-2-2h-3"></path><path d="M3 16v3a2 2 0 0 0 2 2h3"></path><path d="M16 21h3a2 2 0 0 0 2-2v-3"></path>`;
+const ICON_EXIT_FULLSCREEN = `<path d="M8 3v3a2 2 0 0 1-2 2H3"></path><path d="M21 8h-3a2 2 0 0 1-2-2V3"></path><path d="M3 16h3a2 2 0 0 1 2 2v3"></path><path d="M16 21v-3a2 2 0 0 1 2-2h3"></path>`;
+
+function updateFullscreenIcon() {
+  const isFullscreen = !!document.fullscreenElement;
+  fullscreenBtn.querySelector("svg").innerHTML = isFullscreen ? ICON_EXIT_FULLSCREEN : ICON_ENTER_FULLSCREEN;
+  fullscreenBtn.title = isFullscreen ? "Quitter le plein écran" : "Plein écran";
+}
+
+fullscreenBtn.addEventListener("click", () => {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen?.();
+  } else {
+    document.exitFullscreen?.();
+  }
+});
+document.addEventListener("fullscreenchange", updateFullscreenIcon);
+
 
 /* ===================== SEGMENTS UI ===================== */
 function renderSegments() {

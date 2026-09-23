@@ -262,6 +262,16 @@ html, body {
 }
 .settings-fab:active { transform: rotate(45deg) scale(.96); }
 
+/* ------- BOUTON FLOTTANT PLEIN ÉCRAN ------- */
+.fullscreen-fab {
+  right: 92px;
+}
+.fullscreen-fab:hover {
+  transform: scale(1.08);
+  filter: brightness(1.2);
+}
+.fullscreen-fab:active { transform: scale(.96); }
+
 /* ------- MODALE PARAMÈTRES ------- */
 .settings-card {
   width: min(480px, 90vw);
