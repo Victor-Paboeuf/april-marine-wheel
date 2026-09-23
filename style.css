@@ -1,11 +1,11 @@
 * { box-sizing: border-box; }
+
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
   overflow-x: hidden;
   font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
-  background: radial-gradient(ellipse at top, #0a3a56 0%, #002238 55%, #001320 100%);
   color: #f4f9ff;
 }
 
@@ -21,18 +21,26 @@ html, body {
   z-index: 1;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 24px 20px 60px;
+  padding: 12px 16px 16px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
 }
 
 .app-header {
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 8px;
+  flex: 0 0 auto;
 }
 
-.app-header h1 {
-  font-size: clamp(28px, 5vw, 44px);
-  margin: 0 0 6px;
-  letter-spacing: 1px;
+.app-logo {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  max-height: 18vh;
+  height: auto;
+  padding: 10px 18px;
 }
 
 .gradient-text {
@@ -51,12 +59,14 @@ html, body {
 .subtitle {
   opacity: .7;
   margin: 0;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .layout {
   display: flex;
   justify-content: center;
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 /* ------- WHEEL ------- */
@@ -64,14 +74,18 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 18px;
+  justify-content: center;
+  gap: 12px;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
 }
 
 .wheel-wrapper {
   position: relative;
-  width: 560px;
-  max-width: 90vw;
+  width: min(94vw, calc(100dvh - 210px), 1000px);
   aspect-ratio: 1;
+  flex: 0 0 auto;
 }
 
 .glow-ring {
@@ -198,14 +212,15 @@ html, body {
 }
 
 .result-banner {
-  min-height: 40px;
-  padding: 10px 24px;
+  min-height: 32px;
+  padding: 8px 20px;
   border-radius: 999px;
   background: rgba(255,255,255,.06);
   border: 1px solid rgba(255,255,255,.12);
-  font-size: 16px;
+  font-size: clamp(13px, 2vw, 16px);
   text-align: center;
   backdrop-filter: blur(6px);
+  flex: 0 0 auto;
 }
 
 /* ------- BOUTON FLOTTANT PARAMÈTRES ------- */

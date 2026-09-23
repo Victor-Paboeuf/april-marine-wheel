@@ -447,15 +447,17 @@ resizeBgCanvas();
 
 function initBgParticles() {
   bgParticles = [];
+  const colors = ["98,157,48", "246,169,54"]; // vert / orange
   const count = Math.floor((bgCanvas.width * bgCanvas.height) / 18000);
   for (let i = 0; i < count; i++) {
     bgParticles.push({
       x: Math.random() * bgCanvas.width,
       y: Math.random() * bgCanvas.height,
-      r: Math.random() * 1.6 + 0.4,
+      r: Math.random() * 100 + 0.4,
       vx: (Math.random() - 0.5) * 0.15,
       vy: (Math.random() - 0.5) * 0.15,
       alpha: Math.random() * 0.6 + 0.2,
+      color: colors[i % colors.length],
     });
   }
 }
@@ -473,7 +475,7 @@ function bgLoop() {
     if (p.y > bgCanvas.height) p.y = 0;
     bctx.beginPath();
     bctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    bctx.fillStyle = `rgba(190,225,255,${p.alpha})`;
+    bctx.fillStyle = `rgba(${p.color},${p.alpha})`;
     bctx.fill();
   });
   requestAnimationFrame(bgLoop);
