@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎡 Roue de la Chance</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="bg-particles"></canvas>
+
+<div class="app">
+  <header class="app-header">
+    <h1>🎡 Roue de la <span class="gradient-text">Chance</span></h1>
+    <p class="subtitle">Personnalise, lance, et laisse la magie opérer ✨</p>
+  </header>
+
+  <main class="layout">
+    <!-- Colonne roue -->
+    <section class="wheel-zone">
+      <div class="wheel-wrapper" id="wheelWrapper">
+        <div class="glow-ring"></div>
+        <div class="lights" id="lights"></div>
+        <div class="pointer">▼</div>
+        <canvas id="wheelCanvas" width="560" height="560"></canvas>
+        <button id="spinBtn" class="spin-btn">
+          <span>TOURNER</span>
+        </button>
+      </div>
+
+      <div class="result-banner" id="resultBanner">
+        <span id="resultText">Prêt à tenter ta chance ?</span>
+      </div>
+    </section>
+
+    <!-- Colonne panneau -->
+    <section class="panel">
+      <div id="segmentsList" class="segments-list"></div>
+      <button id="addSegmentBtn" class="btn secondary">+ Ajouter un segment</button>
+      <div class="panel-actions">
+        <button id="resetBtn" class="btn ghost">Réinitialiser</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- Overlay confettis / flash -->
+<canvas id="confettiCanvas"></canvas>
+<div id="flashOverlay" class="flash-overlay"></div>
+<div id="winnerModal" class="winner-modal">
+  <div class="winner-card">
+    <div class="winner-emoji">🏆</div>
+    <h2>Gagnant !</h2>
+    <p id="winnerLabel"></p>
+    <button id="closeWinnerBtn" class="btn secondary">Fermer</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
