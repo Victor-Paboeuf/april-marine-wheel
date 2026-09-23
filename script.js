@@ -185,7 +185,9 @@ function drawWheel() {
     const maxTextWidth = Math.max(60, textX - 66); // espace dispo avant le moyeu
     const lines = wrapText(ctx, seg.label, maxTextWidth);
     const lineHeight = fontSize * 1.15;
-    const centerX = textX - maxTextWidth / 2; // centre du texte dans l'espace disponible
+    // centre chaque ligne par rapport à sa propre largeur, ancré près du bord extérieur
+    const longestLineWidth = Math.max(...lines.map((l) => ctx.measureText(l).width));
+    const centerX = textX - longestLineWidth / 2;
     lines.forEach((line, li) => {
       const y = 6 + (li - (lines.length - 1) / 2) * lineHeight;
       ctx.fillText(line, centerX, y);
