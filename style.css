@@ -56,10 +56,8 @@ html, body {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 100%;
   max-height: 18vh;
-  height: auto;
-  padding: 10px 18px;
+  padding: 50px 18px;
 }
 
 .gradient-text {
@@ -242,8 +240,8 @@ html, body {
   position: fixed;
   right: 24px;
   bottom: 24px;
-  width: 56px;
-  height: 56px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   border: 1px solid rgba(255,255,255,.15);
   background: #0a3c5e;
@@ -256,6 +254,10 @@ html, body {
   box-shadow: 0 8px 24px rgba(0,0,0,.5);
   transition: transform .2s ease, filter .2s ease;
 }
+.settings-fab svg {
+  width: 34px;
+  height: 34px;
+}
 .settings-fab:hover {
   transform: rotate(45deg) scale(1.08);
   filter: brightness(1.2);
@@ -264,7 +266,7 @@ html, body {
 
 /* ------- BOUTON FLOTTANT PLEIN ÉCRAN ------- */
 .fullscreen-fab {
-  right: 92px;
+  right: 108px;
 }
 .fullscreen-fab:hover {
   transform: scale(1.08);
