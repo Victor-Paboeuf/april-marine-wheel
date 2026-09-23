@@ -284,7 +284,9 @@ spinBtn.addEventListener("click", () => {
   // Le pointeur est en haut (angle -PI/2 dans repère canvas où 0 = droite, sens horaire).
   // On veut que targetMid + rotationFinale ≡ -PI/2 (mod 2PI)
   const pointerAngle = -Math.PI / 2;
-  const extraTurns = SETTINGS.minTurns + Math.random() * 2;
+  // Nombre ENTIER de tours complets (une fraction de tour décalerait l'angle final
+  // par rapport au segment ciblé, car elle ne s'annule pas modulo 2π).
+  const extraTurns = SETTINGS.minTurns + Math.floor(Math.random() * 3);
   const currentMod = ((rotation % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
   let delta = pointerAngle - (currentMod + targetMid);
   delta = ((delta % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
