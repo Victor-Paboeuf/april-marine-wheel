@@ -338,6 +338,17 @@ html, body {
 .segments-list::-webkit-scrollbar { width: 6px; }
 .segments-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,.2); border-radius: 3px; }
 
+.total-weight {
+  margin: 0 0 12px;
+  font-size: 13px;
+  opacity: .8;
+  text-align: right;
+}
+.total-weight strong {
+  color: #f7aa36;
+  font-size: 15px;
+}
+
 .segment-row {
   display: flex;
   align-items: center;
