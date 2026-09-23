@@ -1,11 +1,11 @@
 /* ===================== ÉTAT ===================== */
 const DEFAULT_SEGMENTS = [
-  { label: "🎁 Paddle", weight: 16 },
-  { label: "👕 Veste", weight: 16 },
-  { label: "💰 Jackpot", weight: 16 },
-  { label: "🎯 Mug", weight: 16 },
-  { label: "🍀 Porte-clés", weight: 16 },
-  { label: "🔥 Chandail", weight: 16 },
+  { label: "🎁 Paddle", weight: 1 },
+  { label: "👕 Veste", weight: 1 },
+  { label: "💰 Jackpot", weight: 1 },
+  { label: "🎯 Mug", weight: 1 },
+  { label: "🍀 Porte-clés", weight: 1 },
+  { label: "🔥 Chandail", weight: 1 },
 ];
 
 // Réglages fixes (non configurables par l'utilisateur)
