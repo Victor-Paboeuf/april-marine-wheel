@@ -4,7 +4,7 @@ const DEFAULT_SEGMENTS = [
   { label: "😢 Perdu", weight: 1 },
   { label: "💰 Jackpot", weight: 1 },
   { label: "🎯 Mug", weight: 1 },
-  { label: "🍀 3 mois offerts", weight: 1 },
+  { label: "🍀 Porte-clés", weight: 1 },
   { label: "🔥 Chandail", weight: 1 },
 ];
 
@@ -159,7 +159,7 @@ function drawWheel() {
     ctx.textAlign = "right";
     ctx.fillStyle = getContrastColor(color);
     ctx.font = "bold " + Math.max(13, Math.min(22, 300 / state.segments.length)) + "px 'Segoe UI', sans-serif";
-    ctx.fillText(seg.label, radius - 24, 6);
+    ctx.fillText(seg.label, radius - 48, 6);
     ctx.restore();
 
     startAngle = endAngle;
@@ -338,7 +338,6 @@ function finishSpin(winnerIndex) {
   wheelWrapper.classList.remove("spinning");
 
   const winner = state.segments[winnerIndex];
-  const winnerColor = colorForIndex(winnerIndex);
 
   // effets woah
   playFanfare();
