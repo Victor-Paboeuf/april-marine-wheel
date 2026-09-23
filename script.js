@@ -225,7 +225,7 @@ function playTick() {
   const osc = ac.createOscillator();
   const gain = ac.createGain();
   osc.type = "square";
-  osc.frequency.value = 620;
+  osc.frequency.value = 280;
   gain.gain.setValueAtTime(0.08, ac.currentTime);
   gain.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + 0.08);
   osc.connect(gain).connect(ac.destination);
@@ -236,7 +236,7 @@ function playTick() {
 function playFanfare() {
   if (!SETTINGS.sound) return;
   const ac = getAudioCtx();
-  const notes = [523.25, 659.25, 783.99, 1046.5];
+  const notes = [523.25, 659.25, 783.99, 1046.5, 1318.51];
   notes.forEach((freq, i) => {
     const osc = ac.createOscillator();
     const gain = ac.createGain();
