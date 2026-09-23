@@ -4,7 +4,7 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow-x: hidden;
+  overflow: hidden;
   font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
   color: #f4f9ff;
 }
@@ -22,8 +22,9 @@ html, body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 12px 16px 16px;
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
