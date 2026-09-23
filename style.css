@@ -75,7 +75,6 @@ html, body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
   flex: 1 1 auto;
   min-height: 0;
   width: 100%;
@@ -90,17 +89,12 @@ html, body {
 
 .glow-ring {
   position: absolute;
-  inset: -20px;
+  inset: -36px;
   border-radius: 50%;
-  background: conic-gradient(from 0deg, #004161, #639e30, #f7aa36, #004161);
-  filter: blur(30px);
+  background: conic-gradient(from 0deg, #ffffff);
+  filter: blur(22px) saturate(1.6) brightness(1.35);
   opacity: 1;
-  animation: spinGlow 8s linear infinite;
   z-index: 0;
-}
-
-@keyframes spinGlow {
-  to { transform: rotate(360deg); }
 }
 
 .lights {
