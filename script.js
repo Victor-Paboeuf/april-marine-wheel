@@ -1,11 +1,11 @@
 /* ===================== ÉTAT ===================== */
 const DEFAULT_SEGMENTS = [
-  { label: "🎁 Cadeau", weight: 1 },
-  { label: "😢 Perdu", weight: 3 },
+  { label: "🎁 Paddle", weight: 1 },
+  { label: "😢 Perdu", weight: 1 },
   { label: "💰 Jackpot", weight: 1 },
-  { label: "🎯 Rejoue", weight: 2 },
-  { label: "🍀 Chance", weight: 2 },
-  { label: "🔥 Bonus", weight: 1 },
+  { label: "🎯 Mug", weight: 1 },
+  { label: "🍀 3 mois offerts", weight: 1 },
+  { label: "🔥 Chandail", weight: 1 },
 ];
 
 // Réglages fixes (non configurables par l'utilisateur)
