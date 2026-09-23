@@ -55,14 +55,8 @@ html, body {
 }
 
 .layout {
-  display: grid;
-  grid-template-columns: minmax(320px, 1fr) 380px;
-  gap: 32px;
-  align-items: start;
-}
-
-@media (max-width: 900px) {
-  .layout { grid-template-columns: 1fr; }
+  display: flex;
+  justify-content: center;
 }
 
 /* ------- WHEEL ------- */
@@ -212,6 +206,72 @@ html, body {
   font-size: 16px;
   text-align: center;
   backdrop-filter: blur(6px);
+}
+
+/* ------- BOUTON FLOTTANT PARAMÈTRES ------- */
+.settings-fab {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.15);
+  background: linear-gradient(135deg, #004161, #639e30, #f7aa36);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 70;
+  box-shadow: 0 8px 24px rgba(0,0,0,.5);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.settings-fab:hover {
+  transform: rotate(45deg) scale(1.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,.6);
+}
+.settings-fab:active { transform: rotate(45deg) scale(.96); }
+
+/* ------- MODALE PARAMÈTRES ------- */
+.settings-card {
+  width: min(480px, 90vw);
+  max-height: 85vh;
+  overflow-y: auto;
+  text-align: left;
+  padding: 28px 28px 24px;
+}
+
+.settings-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.settings-modal-header h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.modal-close-btn {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.15);
+  color: #e6e2ff;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: transform .15s, filter .15s;
+}
+.modal-close-btn:hover { transform: translateY(-1px); filter: brightness(1.15); }
+
+.settings-modal .panel {
+  background: transparent;
+  border: none;
+  padding: 0;
+  backdrop-filter: none;
+  box-shadow: none;
 }
 
 /* ------- PANEL ------- */

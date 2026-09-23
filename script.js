@@ -44,6 +44,18 @@ const flashOverlay = document.getElementById("flashOverlay");
 const winnerModal = document.getElementById("winnerModal");
 const winnerLabel = document.getElementById("winnerLabel");
 const closeWinnerBtn = document.getElementById("closeWinnerBtn");
+const settingsBtn = document.getElementById("settingsBtn");
+const settingsModal = document.getElementById("settingsModal");
+const closeSettingsBtn = document.getElementById("closeSettingsBtn");
+
+/* ===================== MODALE PARAMÈTRES ===================== */
+settingsBtn.addEventListener("click", () => {
+  settingsModal.classList.add("show");
+});
+closeSettingsBtn.addEventListener("click", () => settingsModal.classList.remove("show"));
+settingsModal.addEventListener("click", (e) => {
+  if (e.target === settingsModal) settingsModal.classList.remove("show");
+});
 
 /* ===================== SEGMENTS UI ===================== */
 function renderSegments() {
