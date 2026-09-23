@@ -118,8 +118,8 @@ function totalWeight() {
 }
 
 // Couleur générée automatiquement pour chaque segment (non personnalisable)
-// Alterne entre orange, vert et blanc.
-const WHEEL_COLORS = ["#f6a936", "#629d30", "#ffffff"];
+// const WHEEL_COLORS = ["#f6a936", "#629d30", "#ffffff"];
+const WHEEL_COLORS = ["#0a3c5e","#ffffff"];
 function colorForIndex(i) {
   return WHEEL_COLORS[i % WHEEL_COLORS.length];
 }
@@ -159,8 +159,6 @@ function drawWheel() {
     ctx.textAlign = "right";
     ctx.fillStyle = getContrastColor(color);
     ctx.font = "bold " + Math.max(13, Math.min(22, 300 / state.segments.length)) + "px 'Segoe UI', sans-serif";
-    ctx.shadowColor = "rgba(0,0,0,.4)";
-    ctx.shadowBlur = 4;
     ctx.fillText(seg.label, radius - 24, 6);
     ctx.restore();
 
@@ -184,13 +182,13 @@ function getContrastColor(color) {
   // extrait la luminosité (hsl ou hex) pour choisir un texte clair ou sombre
   const hslMatch = /hsl\(\s*[\d.]+,\s*[\d.]+%,\s*([\d.]+)%\s*\)/.exec(color);
   if (hslMatch) {
-    return parseFloat(hslMatch[1]) >= 55 ? "#111" : "#fff";
+    return parseFloat(hslMatch[1]) >= 55 ? "#0a3c5e" : "#fff";
   }
   const hexMatch = /^#([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i.exec(color);
   if (hexMatch) {
     const [r, g, b] = hexMatch.slice(1).map((h) => parseInt(h, 16));
     const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-    return luminance >= 0.6 ? "#111" : "#fff";
+    return luminance >= 0.6 ? "#0a3c5e" : "#fff";
   }
   return "#fff";
 }
