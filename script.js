@@ -414,20 +414,23 @@ function drawWheel() {
     ctx.translate(cx, cy);
     ctx.rotate(mid);
     ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
     ctx.fillStyle = getContrastColor(color);
     const fontSize = Math.max(17, Math.min(32, 380 / state.segments.length));
     ctx.font = "bold " + fontSize + "px 'Segoe UI', sans-serif";
 
-    const textX = radius - 48;
-    const maxTextWidth = Math.max(60, textX - 66); // espace dispo avant le moyeu
+    // Espace radial disponible dans la case (entre le moyeu et le bord
+    // extérieur) : le texte est centré au milieu de cet espace, aussi bien
+    // horizontalement (le long du rayon) que verticalement (multi-lignes).
+    const hubRadius = 74;
+    const outerRadius = radius - 20;
+    const anchorX = (hubRadius + outerRadius) / 2;
+    const maxTextWidth = Math.max(40, outerRadius - hubRadius - 12);
     const lines = wrapText(ctx, getSegmentLabel(seg), maxTextWidth);
     const lineHeight = fontSize * 1.15;
-    // centre chaque ligne par rapport à sa propre largeur, ancré près du bord extérieur
-    const longestLineWidth = Math.max(...lines.map((l) => ctx.measureText(l).width));
-    const centerX = textX - longestLineWidth / 2;
     lines.forEach((line, li) => {
-      const y = 6 + (li - (lines.length - 1) / 2) * lineHeight;
-      ctx.fillText(line, centerX, y);
+      const y = (li - (lines.length - 1) / 2) * lineHeight;
+      ctx.fillText(line, anchorX, y);
     });
     ctx.restore();
 

@@ -141,6 +141,18 @@ html, body {
   50% { opacity: 1; transform: scale(1.15) translate(var(--tx), var(--ty)); }
 }
 
+/* Ombre portée statique de la roue : élément séparé, non affecté par la
+   rotation du canvas, pour éviter que l'ombre ne tourne visuellement avec
+   la roue. */
+.wheel-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+}
+
 #wheelCanvas {
   position: relative;
   z-index: 1;
@@ -149,8 +161,7 @@ html, body {
   border-radius: 50%;
   box-shadow:
     0 0 0 8px #0a3c5e,
-    0 0 0 12px rgba(255,255,255,.06),
-    0 20px 60px rgba(0,0,0,.6);
+    0 0 0 12px rgba(255,255,255,.06);
   transition: filter .2s;
   transform-origin: 50% 50%;
   will-change: transform;
