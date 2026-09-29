@@ -416,7 +416,7 @@ function drawWheel() {
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillStyle = getContrastColor(color);
-    const fontSize = Math.max(17, Math.min(32, 380 / state.segments.length));
+    const fontSize = Math.max(22, Math.min(42, 480 / state.segments.length));
     ctx.font = "bold " + fontSize + "px 'Segoe UI', sans-serif";
 
     // Espace radial disponible dans la case (entre le moyeu et le bord
