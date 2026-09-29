@@ -662,6 +662,29 @@ function bgLoop() {
 }
 bgLoop();
 
+/* ===================== RACCOURCIS CLAVIER (Entrée / Espace) ===================== */
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Enter" && e.key !== " " && e.code !== "Space") return;
+
+  // Ignore si l'utilisateur est en train de taper dans un champ
+  const tag = document.activeElement?.tagName;
+  if (tag === "INPUT" || tag === "TEXTAREA") return;
+
+  e.preventDefault(); // évite le scroll de la page avec la barre d'espace
+
+  if (winnerModal.classList.contains("show")) {
+    winnerModal.classList.remove("show");
+    return;
+  }
+  if (settingsModal.classList.contains("show")) {
+    settingsModal.classList.remove("show");
+    return;
+  }
+  if (!spinning) {
+    spinBtn.click();
+  }
+});
+
 /* ===================== INIT ===================== */
 renderSegments();
 buildLights();
