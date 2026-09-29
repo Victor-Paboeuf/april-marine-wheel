@@ -1,11 +1,28 @@
 /* ===================== ÉTAT ===================== */
+// Ordre des 20 prix sur la roue (correspond aux probabilités demandées :
+// 6 Kit ustensiles (30%), 5 Bouteille d'eau ACI (25%), 4 Carnet ACI (20%),
+// 3 Tumbler (15%), 2 Beachbag (10%))
 const DEFAULT_SEGMENTS = [
-  { label: "?? Paddle", weight: 1 },
-  { label: "🕶️ Lunettes de soleil", weight: 1 },
-  { label: "🛟 Bouée", weight: 1 },
-  { label: "☕ Mug", weight: 1 },
-  { label: "⚓ Porte-clés", weight: 1 },
-  { label: "👕 Chandail", weight: 1 },
+  { label: "🍴 Kit ustensiles", weight: 1 },
+  { label: "💧 Bouteille d'eau ACI", weight: 1 },
+  { label: "🍴 Kit ustensiles", weight: 1 },
+  { label: "📓 Carnet ACI", weight: 1 },
+  { label: "💧 Bouteille d'eau ACI", weight: 1 },
+  { label: "🍴 Kit ustensiles", weight: 1 },
+  { label: "🥤 Tumbler", weight: 1 },
+  { label: "📓 Carnet ACI", weight: 1 },
+  { label: "💧 Bouteille d'eau ACI", weight: 1 },
+  { label: "🍴 Kit ustensiles", weight: 1 },
+  { label: "👜 Beachbag", weight: 1 },
+  { label: "🥤 Tumbler", weight: 1 },
+  { label: "📓 Carnet ACI", weight: 1 },
+  { label: "💧 Bouteille d'eau ACI", weight: 1 },
+  { label: "🍴 Kit ustensiles", weight: 1 },
+  { label: "👜 Beachbag", weight: 1 },
+  { label: "🥤 Tumbler", weight: 1 },
+  { label: "📓 Carnet ACI", weight: 1 },
+  { label: "🍴 Kit ustensiles", weight: 1 },
+  { label: "💧 Bouteille d'eau ACI", weight: 1 },
 ];
 
 // Réglages fixes (non configurables par l'utilisateur)
@@ -83,15 +100,66 @@ function renderSegments() {
   state.segments.forEach((seg, i) => {
     const row = document.createElement("div");
     row.className = "segment-row";
+    row.draggable = true;
+    row.dataset.i = i;
     row.innerHTML = `
+      <button type="button" class="drag-handle" title="Glisser pour réordonner" aria-label="Déplacer le segment" data-i="${i}">☰</button>
       <input type="text" value="${seg.label}" data-i="${i}" data-field="label" placeholder="Nom du segment" />
       <input type="number" value="${seg.weight}" min="1" max="20" data-i="${i}" data-field="weight" title="Poids (probabilité)" />
+      <div class="move-buttons">
+        <button type="button" class="move-up-btn" data-i="${i}" title="Monter" aria-label="Monter le segment" ${i === 0 ? "disabled" : ""}>▲</button>
+        <button type="button" class="move-down-btn" data-i="${i}" title="Descendre" aria-label="Descendre le segment" ${i === state.segments.length - 1 ? "disabled" : ""}>▼</button>
+      </div>
       <button class="remove-btn" data-i="${i}" title="Supprimer">✕</button>
     `;
     segmentsList.appendChild(row);
   });
   drawWheel();
 }
+
+function moveSegment(from, to) {
+  if (to < 0 || to >= state.segments.length || from === to) return;
+  const [item] = state.segments.splice(from, 1);
+  state.segments.splice(to, 0, item);
+  save();
+  renderSegments();
+}
+
+/* ---- Réordonnancement par glisser-déposer (souris) ---- */
+let dragFromIndex = null;
+
+segmentsList.addEventListener("dragstart", (e) => {
+  const row = e.target.closest(".segment-row");
+  if (!row) return;
+  dragFromIndex = parseInt(row.dataset.i, 10);
+  row.classList.add("dragging");
+  e.dataTransfer.effectAllowed = "move";
+  e.dataTransfer.setData("text/plain", String(dragFromIndex));
+});
+
+segmentsList.addEventListener("dragend", (e) => {
+  const row = e.target.closest(".segment-row");
+  if (row) row.classList.remove("dragging");
+  segmentsList.querySelectorAll(".drag-over").forEach((el) => el.classList.remove("drag-over"));
+  dragFromIndex = null;
+});
+
+segmentsList.addEventListener("dragover", (e) => {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = "move";
+  const row = e.target.closest(".segment-row");
+  segmentsList.querySelectorAll(".drag-over").forEach((el) => el.classList.remove("drag-over"));
+  if (row) row.classList.add("drag-over");
+});
+
+segmentsList.addEventListener("drop", (e) => {
+  e.preventDefault();
+  const row = e.target.closest(".segment-row");
+  segmentsList.querySelectorAll(".drag-over").forEach((el) => el.classList.remove("drag-over"));
+  if (!row || dragFromIndex === null) return;
+  const toIndex = parseInt(row.dataset.i, 10);
+  moveSegment(dragFromIndex, toIndex);
+});
 
 segmentsList.addEventListener("input", (e) => {
   const i = e.target.dataset.i;
@@ -116,6 +184,17 @@ segmentsList.addEventListener("click", (e) => {
     state.segments.splice(i, 1);
     save();
     renderSegments();
+    return;
+  }
+  if (e.target.classList.contains("move-up-btn")) {
+    const i = parseInt(e.target.dataset.i, 10);
+    moveSegment(i, i - 1);
+    return;
+  }
+  if (e.target.classList.contains("move-down-btn")) {
+    const i = parseInt(e.target.dataset.i, 10);
+    moveSegment(i, i + 1);
+    return;
   }
 });
 
@@ -139,8 +218,20 @@ function totalWeight() {
 }
 
 // Couleur générée automatiquement pour chaque segment (non personnalisable)
-// const WHEEL_COLORS = ["#f6a936", "#629d30", "#ffffff"];
-const WHEEL_COLORS = ["#0a3c5e","#ffffff"];
+// Motif alterné officiel APRIL Marine, répété tous les 10 segments :
+// Bleu marin / Blanc / Vert / Blanc / Orange / Blanc / Bleu ciel / Blanc / Rose / Blanc
+const WHEEL_COLORS = [
+  "#004161", // Bleu marin
+  "#FFFFFF", // Blanc
+  "#639E30", // Vert
+  "#FFFFFF", // Blanc
+  "#F7AA36", // Orange
+  "#FFFFFF", // Blanc
+  "#3EAAC4", // Bleu ciel
+  "#FFFFFF", // Blanc
+  "#D7488F", // Rose
+  "#FFFFFF", // Blanc
+];
 function colorForIndex(i) {
   return WHEEL_COLORS[i % WHEEL_COLORS.length];
 }
