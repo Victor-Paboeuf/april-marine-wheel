@@ -163,27 +163,31 @@ html, body {
 
 .pointer {
   position: absolute;
-  top: -14px;
+  top: 0px;
   left: 50%;
-  transform: translateX(-50%);
   width: 46px;
-  height: 46px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  color: #ffffff;
-  background: #004161;
-  border: 3px solid #ffffff;
-  border-radius: 50%;
-  box-shadow: 0 4px 14px rgba(0,0,0,.45);
+  height: 40px;
+  transform: translateX(-50%);
   z-index: 4;
-  animation: pointerBounce 1.4s ease-in-out infinite;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,.45));
 }
 
-@keyframes pointerBounce {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(6px); }
+/* Triangle pointant vers le bas : bordure blanche (::before, pleine taille)
+   + remplissage bleu (::after, inset de l'épaisseur de bordure). Fixe, sans
+   animation. */
+.pointer::before,
+.pointer::after {
+  content: "";
+  position: absolute;
+  clip-path: polygon(50% 100%, 0% 0%, 100% 0%);
+}
+.pointer::before {
+  inset: 0;
+  background: #ffffff;
+}
+.pointer::after {
+  inset: 3px;
+  background: #004161;
 }
 
 .spin-btn {
