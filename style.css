@@ -151,6 +151,9 @@ html, body {
     0 0 0 12px rgba(255,255,255,.06),
     0 20px 60px rgba(0,0,0,.6);
   transition: filter .2s;
+  transform-origin: 50% 50%;
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .wheel-wrapper.spinning #wheelCanvas {

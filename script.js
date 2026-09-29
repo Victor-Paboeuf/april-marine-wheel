@@ -211,7 +211,28 @@ document.getElementById("resetBtn").addEventListener("click", () => {
 });
 
 /* ===================== WHEEL DRAWING ===================== */
-let rotation = 0; // radians actuels de la roue
+let rotation = 0; // radians actuels de la roue (appliqués via transform CSS, pas redessinés)
+let wheelDisplaySize = 560; // taille CSS (px) du canvas, mise à jour au resize
+
+// La rotation est appliquée en CSS (accéléré GPU) plutôt qu'en redessinant le
+// canvas à chaque frame : c'est ce qui rend l'animation fluide même si le
+// thread JS est occupé (sons, confettis, gouttelettes...).
+function setWheelRotation(rad) {
+  canvas.style.transform = `rotate(${rad}rad)`;
+}
+
+// Redimensionne le bitmap du canvas selon le devicePixelRatio pour un rendu
+// net sur écrans HiDPI, sans impacter les perfs (dessiné une seule fois).
+function resizeWheelCanvas() {
+  const rect = canvas.getBoundingClientRect();
+  const size = Math.max(1, Math.round(rect.width || wheelDisplaySize));
+  const dpr = window.devicePixelRatio || 1;
+  wheelDisplaySize = size;
+  canvas.width = size * dpr;
+  canvas.height = size * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  drawWheel();
+}
 
 function totalWeight() {
   return state.segments.reduce((s, seg) => s + seg.weight, 0);
@@ -237,13 +258,15 @@ function colorForIndex(i) {
 }
 
 function drawWheel() {
-  const size = canvas.width;
+  const size = wheelDisplaySize;
   const radius = size / 2;
   const cx = radius, cy = radius;
   ctx.clearRect(0, 0, size, size);
 
   const angle = (Math.PI * 2) / state.segments.length;
-  let startAngle = rotation;
+  // La roue est toujours dessinée à l'angle 0 : la rotation visuelle est
+  // appliquée séparément via CSS transform (voir setWheelRotation).
+  let startAngle = 0;
 
   state.segments.forEach((seg, i) => {
     const endAngle = startAngle + angle;
@@ -466,7 +489,7 @@ spinBtn.addEventListener("click", () => {
     const t = Math.min(elapsed / duration, 1);
     const eased = t < 1 ? 1 - Math.pow(1 - t, 4) : 1; // ease-out quart pour ralentissement doux
     rotation = startRotation + totalRotation * eased;
-    drawWheel();
+    setWheelRotation(rotation);
 
     // gouttelettes d'eau projetées selon la vitesse angulaire
     const dt = Math.max(1, now - lastFrameTime);
@@ -705,6 +728,11 @@ function confettiLoop() {
 }
 
 /* ===================== PARTICULES DE FOND ===================== */
+// Désactivées : le canvas #bg-particles est masqué (display:none) en CSS,
+// donc faire tourner une boucle requestAnimationFrame en continu ne servait
+// à rien et consommait du CPU inutilement, ce qui pouvait nuire à la
+// fluidité de l'animation de la roue.
+/*
 const bgCanvas = document.getElementById("bg-particles");
 const bctx = bgCanvas.getContext("2d");
 let bgParticles = [];
@@ -752,6 +780,7 @@ function bgLoop() {
   requestAnimationFrame(bgLoop);
 }
 bgLoop();
+*/
 
 /* ===================== RACCOURCIS CLAVIER (Entrée / Espace) ===================== */
 document.addEventListener("keydown", (e) => {
@@ -779,4 +808,6 @@ document.addEventListener("keydown", (e) => {
 /* ===================== INIT ===================== */
 renderSegments();
 buildLights();
-drawWheel();
+window.addEventListener("resize", resizeWheelCanvas);
+resizeWheelCanvas();
+setWheelRotation(rotation);
