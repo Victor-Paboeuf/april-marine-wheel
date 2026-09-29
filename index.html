@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>APRIL Marine Wheel</title>
+<link rel="icon" type="image/svg+xml" href="logo-april-marine.svg">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,7 +12,7 @@
 
 <div class="app">
   <header class="app-header">
-    <img src="logo-april-marine.svg" alt="April Marine" class="app-logo" />
+    <img src="logo-april.svg" alt="April Marine" class="app-logo" />
   </header>
 
   <main class="layout">
@@ -30,7 +31,7 @@
 </div>
 
 <!-- Bouton flottant paramètres -->
-<button id="settingsBtn" class="settings-fab" title="Paramètres" aria-label="Paramètres">
+<button id="settingsBtn" class="settings-fab" title="Paramètres" aria-label="Paramètres" data-i18n-title="settings" data-i18n-aria="settings">
   <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <circle cx="12" cy="12" r="3"></circle>
     <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
@@ -47,18 +48,24 @@
   </svg>
 </button>
 
+<!-- Switch de langue FR / EN -->
+<div class="lang-switch" id="langSwitch">
+  <button type="button" class="lang-btn" data-lang="fr">FR</button>
+  <button type="button" class="lang-btn" data-lang="en">EN</button>
+</div>
+
 <!-- Modale de configuration -->
 <div id="settingsModal" class="winner-modal settings-modal">
   <div class="winner-card settings-card">
     <div class="settings-modal-header">
-      <h2>Configuration</h2>
-      <button id="closeSettingsBtn" class="modal-close-btn" aria-label="Fermer">✕</button>
+      <h2 data-i18n="configTitle">Configuration</h2>
+      <button id="closeSettingsBtn" class="modal-close-btn" aria-label="Fermer" data-i18n-aria="close">✕</button>
     </div>
     <div class="panel">
       <div id="segmentsList" class="segments-list"></div>
-      <button id="addSegmentBtn" class="btn secondary">+ Ajouter un segment</button>
+      <button id="addSegmentBtn" class="btn secondary" data-i18n="addSegment">+ Ajouter un segment</button>
       <div class="panel-actions">
-        <button id="resetBtn" class="btn ghost">Réinitialiser</button>
+        <button id="resetBtn" class="btn ghost" data-i18n="reset">Réinitialiser</button>
       </div>
     </div>
   </div>
@@ -73,9 +80,8 @@
 <div id="winnerModal" class="winner-modal">
   <div class="winner-card">
     <div class="winner-emoji">🏆</div>
-    <h2>Gagnant !</h2>
     <p id="winnerLabel"></p>
-    <button id="closeWinnerBtn" class="btn secondary">Fermer</button>
+    <button id="closeWinnerBtn" class="btn secondary" data-i18n="close">Fermer</button>
   </div>
 </div>
 

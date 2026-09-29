@@ -2,27 +2,29 @@
 // Ordre des 20 prix sur la roue (correspond aux probabilités demandées :
 // 6 Kit ustensiles (30%), 5 Bouteille d'eau ACI (25%), 4 Carnet ACI (20%),
 // 3 Tumbler (15%), 2 Beachbag (10%))
+// Les segments par défaut référencent une "key" traduisible (voir PRIZE_LABELS)
+// plutôt qu'un libellé figé, afin de supporter le switch de langue FR/EN.
 const DEFAULT_SEGMENTS = [
-  { label: "🍴 Kit ustensiles", weight: 1 },
-  { label: "💧 Bouteille d'eau ACI", weight: 1 },
-  { label: "🍴 Kit ustensiles", weight: 1 },
-  { label: "📓 Carnet ACI", weight: 1 },
-  { label: "💧 Bouteille d'eau ACI", weight: 1 },
-  { label: "🍴 Kit ustensiles", weight: 1 },
-  { label: "🥤 Tumbler", weight: 1 },
-  { label: "📓 Carnet ACI", weight: 1 },
-  { label: "💧 Bouteille d'eau ACI", weight: 1 },
-  { label: "🍴 Kit ustensiles", weight: 1 },
-  { label: "👜 Beachbag", weight: 1 },
-  { label: "🥤 Tumbler", weight: 1 },
-  { label: "📓 Carnet ACI", weight: 1 },
-  { label: "💧 Bouteille d'eau ACI", weight: 1 },
-  { label: "🍴 Kit ustensiles", weight: 1 },
-  { label: "👜 Beachbag", weight: 1 },
-  { label: "🥤 Tumbler", weight: 1 },
-  { label: "📓 Carnet ACI", weight: 1 },
-  { label: "🍴 Kit ustensiles", weight: 1 },
-  { label: "💧 Bouteille d'eau ACI", weight: 1 },
+  { key: "kit", weight: 1 },
+  { key: "bottle", weight: 1 },
+  { key: "kit", weight: 1 },
+  { key: "notebook", weight: 1 },
+  { key: "bottle", weight: 1 },
+  { key: "kit", weight: 1 },
+  { key: "tumbler", weight: 1 },
+  { key: "notebook", weight: 1 },
+  { key: "bottle", weight: 1 },
+  { key: "kit", weight: 1 },
+  { key: "beachbag", weight: 1 },
+  { key: "tumbler", weight: 1 },
+  { key: "notebook", weight: 1 },
+  { key: "bottle", weight: 1 },
+  { key: "kit", weight: 1 },
+  { key: "beachbag", weight: 1 },
+  { key: "tumbler", weight: 1 },
+  { key: "notebook", weight: 1 },
+  { key: "kit", weight: 1 },
+  { key: "bottle", weight: 1 },
 ];
 
 // Réglages fixes (non configurables par l'utilisateur)
@@ -34,9 +36,73 @@ const SETTINGS = {
   shake: true,
 };
 
+/* ===================== I18N (FR / EN) ===================== */
+const I18N = {
+  fr: {
+    settings: "Paramètres",
+    fullscreenEnter: "Plein écran",
+    fullscreenExit: "Quitter le plein écran",
+    configTitle: "Configuration",
+    close: "Fermer",
+    addSegment: "+ Ajouter un segment",
+    reset: "Réinitialiser",
+    dragHandle: "Glisser pour réordonner",
+    moveSegmentAria: "Déplacer le segment",
+    segmentNamePlaceholder: "Nom du segment",
+    weightTitle: "Poids (probabilité)",
+    moveUp: "Monter",
+    moveDown: "Descendre",
+    remove: "Supprimer",
+    minSegmentsWarning: "Il faut au moins 2 segments !",
+    newSegmentDefault: "Nouveau",
+  },
+  en: {
+    settings: "Settings",
+    fullscreenEnter: "Fullscreen",
+    fullscreenExit: "Exit fullscreen",
+    configTitle: "Configuration",
+    close: "Close",
+    addSegment: "+ Add a segment",
+    reset: "Reset",
+    dragHandle: "Drag to reorder",
+    moveSegmentAria: "Move segment",
+    segmentNamePlaceholder: "Segment name",
+    weightTitle: "Weight (probability)",
+    moveUp: "Move up",
+    moveDown: "Move down",
+    remove: "Remove",
+    minSegmentsWarning: "You need at least 2 segments!",
+    newSegmentDefault: "New",
+  },
+};
+
+// Libellés des lots par défaut, traduits (sans icônes).
+const PRIZE_LABELS = {
+  kit: { fr: "Kit ustensiles", en: "Utensil kit" },
+  bottle: { fr: "Bouteille d'eau ACI", en: "ACI water bottle" },
+  notebook: { fr: "Carnet ACI", en: "ACI notebook" },
+  tumbler: { fr: "Tumbler", en: "Tumbler" },
+  beachbag: { fr: "Beachbag", en: "Beach bag" },
+};
+
+function t(key) {
+  return (I18N[state.lang] && I18N[state.lang][key]) || I18N.fr[key] || key;
+}
+
+// Renvoie le libellé affiché d'un segment : traduit s'il référence un lot
+// connu (key), sinon le texte libre saisi par l'utilisateur.
+function getSegmentLabel(seg) {
+  if (seg.key && PRIZE_LABELS[seg.key]) {
+    return PRIZE_LABELS[seg.key][state.lang] || PRIZE_LABELS[seg.key].fr;
+  }
+  return seg.label || "";
+}
+
 let state = load() || {
   segments: JSON.parse(JSON.stringify(DEFAULT_SEGMENTS)),
+  lang: "fr",
 };
+if (!state.lang) state.lang = "fr";
 
 function save() {
   localStorage.setItem("wheel-state", JSON.stringify(state));
@@ -64,6 +130,7 @@ const settingsBtn = document.getElementById("settingsBtn");
 const settingsModal = document.getElementById("settingsModal");
 const closeSettingsBtn = document.getElementById("closeSettingsBtn");
 const fullscreenBtn = document.getElementById("fullscreenBtn");
+const langButtons = document.querySelectorAll(".lang-btn");
 
 /* ===================== MODALE PARAMÈTRES ===================== */
 settingsBtn.addEventListener("click", () => {
@@ -81,7 +148,9 @@ const ICON_EXIT_FULLSCREEN = `<path d="M8 3v3a2 2 0 0 1-2 2H3"></path><path d="M
 function updateFullscreenIcon() {
   const isFullscreen = !!document.fullscreenElement;
   fullscreenBtn.querySelector("svg").innerHTML = isFullscreen ? ICON_EXIT_FULLSCREEN : ICON_ENTER_FULLSCREEN;
-  fullscreenBtn.title = isFullscreen ? "Quitter le plein écran" : "Plein écran";
+  const label = isFullscreen ? t("fullscreenExit") : t("fullscreenEnter");
+  fullscreenBtn.title = label;
+  fullscreenBtn.setAttribute("aria-label", label);
 }
 
 fullscreenBtn.addEventListener("click", () => {
@@ -93,6 +162,56 @@ fullscreenBtn.addEventListener("click", () => {
 });
 document.addEventListener("fullscreenchange", updateFullscreenIcon);
 
+/* ===================== SWITCH DE LANGUE FR / EN ===================== */
+function applyLanguage() {
+  document.documentElement.lang = state.lang;
+
+  langButtons.forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.lang === state.lang);
+  });
+
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    el.textContent = t(el.dataset.i18n);
+  });
+  document.querySelectorAll("[data-i18n-title]").forEach((el) => {
+    el.title = t(el.dataset.i18nTitle);
+  });
+  document.querySelectorAll("[data-i18n-aria]").forEach((el) => {
+    el.setAttribute("aria-label", t(el.dataset.i18nAria));
+  });
+  document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+    el.placeholder = t(el.dataset.i18nPlaceholder);
+  });
+
+  updateFullscreenIcon();
+  renderSegments();
+}
+
+langButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    if (state.lang === btn.dataset.lang) return;
+    state.lang = btn.dataset.lang;
+    save();
+    applyLanguage();
+  });
+});
+
+/* ===================== TOAST (petits messages) ===================== */
+function flashMessage(msg) {
+  let toast = document.getElementById("toastMsg");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "toastMsg";
+    toast.className = "toast-msg";
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.classList.remove("show");
+  void toast.offsetWidth;
+  toast.classList.add("show");
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(() => toast.classList.remove("show"), 2200);
+}
 
 /* ===================== SEGMENTS UI ===================== */
 function renderSegments() {
@@ -103,14 +222,14 @@ function renderSegments() {
     row.draggable = true;
     row.dataset.i = i;
     row.innerHTML = `
-      <button type="button" class="drag-handle" title="Glisser pour réordonner" aria-label="Déplacer le segment" data-i="${i}">☰</button>
-      <input type="text" value="${seg.label}" data-i="${i}" data-field="label" placeholder="Nom du segment" />
-      <input type="number" value="${seg.weight}" min="1" max="20" data-i="${i}" data-field="weight" title="Poids (probabilité)" />
+      <button type="button" class="drag-handle" title="${t("dragHandle")}" aria-label="${t("moveSegmentAria")}" data-i="${i}">☰</button>
+      <input type="text" value="${getSegmentLabel(seg)}" data-i="${i}" data-field="label" placeholder="${t("segmentNamePlaceholder")}" />
+      <input type="number" value="${seg.weight}" min="1" max="20" data-i="${i}" data-field="weight" title="${t("weightTitle")}" />
       <div class="move-buttons">
-        <button type="button" class="move-up-btn" data-i="${i}" title="Monter" aria-label="Monter le segment" ${i === 0 ? "disabled" : ""}>▲</button>
-        <button type="button" class="move-down-btn" data-i="${i}" title="Descendre" aria-label="Descendre le segment" ${i === state.segments.length - 1 ? "disabled" : ""}>▼</button>
+        <button type="button" class="move-up-btn" data-i="${i}" title="${t("moveUp")}" aria-label="${t("moveUp")}" ${i === 0 ? "disabled" : ""}>▲</button>
+        <button type="button" class="move-down-btn" data-i="${i}" title="${t("moveDown")}" aria-label="${t("moveDown")}" ${i === state.segments.length - 1 ? "disabled" : ""}>▼</button>
       </div>
-      <button class="remove-btn" data-i="${i}" title="Supprimer">✕</button>
+      <button class="remove-btn" data-i="${i}" title="${t("remove")}">✕</button>
     `;
     segmentsList.appendChild(row);
   });
@@ -168,6 +287,10 @@ segmentsList.addEventListener("input", (e) => {
   if (field === "weight") {
     state.segments[i].weight = Math.max(1, parseInt(e.target.value || "1", 10));
   } else {
+    // Une édition manuelle du libellé remplace la traduction automatique :
+    // on retire la référence "key" pour que le texte saisi soit conservé
+    // tel quel, même après un changement de langue.
+    delete state.segments[i].key;
     state.segments[i][field] = e.target.value;
   }
   save();
@@ -178,7 +301,7 @@ segmentsList.addEventListener("click", (e) => {
   if (e.target.classList.contains("remove-btn")) {
     const i = parseInt(e.target.dataset.i, 10);
     if (state.segments.length <= 2) {
-      flashMessage("Il faut au moins 2 segments !");
+      flashMessage(t("minSegmentsWarning"));
       return;
     }
     state.segments.splice(i, 1);
@@ -199,7 +322,7 @@ segmentsList.addEventListener("click", (e) => {
 });
 
 document.getElementById("addSegmentBtn").addEventListener("click", () => {
-  state.segments.push({ label: "Nouveau", weight: 1 });
+  state.segments.push({ label: t("newSegmentDefault"), weight: 1 });
   save();
   renderSegments();
 });
@@ -292,12 +415,12 @@ function drawWheel() {
     ctx.rotate(mid);
     ctx.textAlign = "center";
     ctx.fillStyle = getContrastColor(color);
-    const fontSize = Math.max(13, Math.min(22, 300 / state.segments.length));
+    const fontSize = Math.max(17, Math.min(32, 380 / state.segments.length));
     ctx.font = "bold " + fontSize + "px 'Segoe UI', sans-serif";
 
     const textX = radius - 48;
     const maxTextWidth = Math.max(60, textX - 66); // espace dispo avant le moyeu
-    const lines = wrapText(ctx, seg.label, maxTextWidth);
+    const lines = wrapText(ctx, getSegmentLabel(seg), maxTextWidth);
     const lineHeight = fontSize * 1.15;
     // centre chaque ligne par rapport à sa propre largeur, ancré près du bord extérieur
     const longestLineWidth = Math.max(...lines.map((l) => ctx.measureText(l).width));
@@ -548,7 +671,7 @@ function flashScreen() {
 }
 
 function showWinnerModal(winner) {
-  winnerLabel.textContent = winner.label;
+  winnerLabel.textContent = getSegmentLabel(winner);
   winnerModal.classList.add("show");
 }
 closeWinnerBtn.addEventListener("click", () => winnerModal.classList.remove("show"));
@@ -806,7 +929,7 @@ document.addEventListener("keydown", (e) => {
 });
 
 /* ===================== INIT ===================== */
-renderSegments();
+applyLanguage();
 buildLights();
 window.addEventListener("resize", resizeWheelCanvas);
 resizeWheelCanvas();

@@ -98,10 +98,11 @@ html, body {
 
 .wheel-wrapper {
   position: relative;
-  width: min(94vw, calc(100dvh - 210px), 1000px);
+  width: min(88vw, calc(100dvh - 210px), 960px);
   aspect-ratio: 1;
   flex: 0 0 auto;
   margin-top: -200px;
+  margin-inline: 24px;
 }
 
 .glow-ring {
@@ -162,12 +163,20 @@ html, body {
 
 .pointer {
   position: absolute;
-  top: -6px;
+  top: -14px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 40px;
-  color: #f7aa36;
-  text-shadow: 0 0 12px #f7aa36, 0 0 24px #639e30;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #ffffff;
+  background: #004161;
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 4px 14px rgba(0,0,0,.45);
   z-index: 4;
   animation: pointerBounce 1.4s ease-in-out infinite;
 }
@@ -193,8 +202,8 @@ html, body {
   font-size: 16px;
   cursor: pointer;
   z-index: 5;
-  box-shadow: 0 0 0 6px rgba(255,255,255,.08), 0 8px 24px rgba(247,171,54,.6);
-  transition: transform .15s ease, box-shadow .15s ease;
+  box-shadow: none;
+  transition: transform .15s ease, filter .15s ease;
 }
 
 .spin-btn:hover { transform: translate(-50%, -50%) scale(1.06); }
@@ -209,8 +218,8 @@ html, body {
 }
 
 @keyframes pulseBtn {
-  0%, 100% { box-shadow: 0 0 0 6px rgba(255,255,255,.08), 0 8px 24px rgba(247,171,54,.6); }
-  50% { box-shadow: 0 0 0 14px rgba(255,255,255,.15), 0 8px 40px rgba(247,171,54,.9); }
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.18); }
 }
 
 .shake {
@@ -275,6 +284,62 @@ html, body {
   filter: brightness(1.2);
 }
 .fullscreen-fab:active { transform: scale(.96); }
+
+/* ------- SWITCH DE LANGUE FR / EN ------- */
+.lang-switch {
+  position: fixed;
+  left: 24px;
+  bottom: 24px;
+  display: flex;
+  gap: 2px;
+  padding: 4px;
+  border-radius: 999px;
+  background: #0a3c5e;
+  border: 1px solid rgba(255,255,255,.15);
+  box-shadow: 0 8px 24px rgba(0,0,0,.5);
+  z-index: 70;
+}
+.lang-btn {
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,.6);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: .5px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.lang-btn:hover { color: #fff; }
+.lang-btn.active {
+  background: #639e30;
+  color: #fff;
+}
+
+/* ------- TOAST ------- */
+.toast-msg {
+  position: fixed;
+  left: 50%;
+  bottom: 110px;
+  transform: translateX(-50%) translateY(10px);
+  background: #0a3c5e;
+  border: 1px solid rgba(255,255,255,.15);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(0,0,0,.5);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 90;
+  transition: opacity .25s, transform .25s;
+}
+.toast-msg.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
 
 /* ------- MODALE PARAMÈTRES ------- */
 .settings-card {
@@ -544,7 +609,7 @@ html, body {
   font-size: 26px;
   font-weight: 800;
   margin: 6px 0 20px;
-  color: #f7aa36;
+  color: #ffffff;
 }
 
 /* ------- MODALE GAGNANT (agrandie) ------- */
