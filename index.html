@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>APRIL Marine Wheel</title>
 <link rel="icon" type="image/svg+xml" href="logo-april-marine.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -30,16 +33,11 @@
   </main>
 </div>
 
-<!-- Bouton flottant paramètres -->
-<button id="settingsBtn" class="settings-fab" title="Paramètres" aria-label="Paramètres" data-i18n-title="settings" data-i18n-aria="settings">
-  <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="12" cy="12" r="3"></circle>
-    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-  </svg>
-</button>
+<!-- Bouton discret d'accès à la configuration (quasi invisible à l'écran) -->
+<button id="settingsBtn" class="settings-fab" title="Paramètres" aria-label="Paramètres" data-i18n-title="settings" data-i18n-aria="settings"></button>
 
 <!-- Bouton flottant plein écran -->
-<button id="fullscreenBtn" class="settings-fab fullscreen-fab" title="Plein écran" aria-label="Plein écran">
+<button id="fullscreenBtn" class="fullscreen-fab" title="Plein écran" aria-label="Plein écran">
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M8 3H5a2 2 0 0 0-2 2v3"></path>
     <path d="M21 8V5a2 2 0 0 0-2-2h-3"></path>
@@ -48,18 +46,17 @@
   </svg>
 </button>
 
-<!-- Switch de langue FR / EN -->
-<div class="lang-switch" id="langSwitch">
-  <button type="button" class="lang-btn" data-lang="fr">FR</button>
-  <button type="button" class="lang-btn" data-lang="en">EN</button>
-</div>
-
 <!-- Modale de configuration -->
 <div id="settingsModal" class="winner-modal settings-modal">
   <div class="winner-card settings-card">
     <div class="settings-modal-header">
       <h2 data-i18n="configTitle">Configuration</h2>
       <button id="closeSettingsBtn" class="modal-close-btn" aria-label="Fermer" data-i18n-aria="close">✕</button>
+    </div>
+    <!-- Switch de langue FR / EN, désormais regroupé dans la config -->
+    <div class="lang-switch" id="langSwitch">
+      <button type="button" class="lang-btn" data-lang="fr">FR</button>
+      <button type="button" class="lang-btn" data-lang="en">EN</button>
     </div>
     <div class="panel">
       <div id="segmentsList" class="segments-list"></div>
@@ -79,9 +76,9 @@
 <div id="flashOverlay" class="flash-overlay"></div>
 <div id="winnerModal" class="winner-modal">
   <div class="winner-card">
+    <button id="closeWinnerBtn" class="winner-close-btn" aria-label="Fermer" data-i18n-aria="close">✕</button>
     <div class="winner-emoji">🏆</div>
     <p id="winnerLabel"></p>
-    <button id="closeWinnerBtn" class="btn secondary" data-i18n="close">Fermer</button>
   </div>
 </div>
 

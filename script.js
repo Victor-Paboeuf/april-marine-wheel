@@ -417,7 +417,7 @@ function drawWheel() {
     ctx.textBaseline = "middle";
     ctx.fillStyle = getContrastColor(color);
     const fontSize = Math.max(22, Math.min(42, 480 / state.segments.length));
-    ctx.font = "bold " + fontSize + "px 'Segoe UI', sans-serif";
+    ctx.font = "bold " + fontSize + "px 'Poppins', 'Segoe UI', sans-serif";
 
     // Espace radial disponible dans la case (entre le moyeu et le bord
     // extérieur) : le texte est centré au milieu de cet espace, aussi bien

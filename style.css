@@ -5,7 +5,7 @@ html, body {
   padding: 0;
   height: 100%;
   overflow: hidden;
-  font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+  font-family: 'Poppins', 'Segoe UI', Roboto, system-ui, sans-serif;
   color: #004161;
   background: #ffffff;
 }
@@ -261,8 +261,43 @@ html, body {
   flex: 0 0 auto;
 }
 
-/* ------- BOUTON FLOTTANT PARAMÈTRES ------- */
+/* ------- BOUTON DISCRET DE CONFIGURATION ------- */
+/* Volontairement quasi invisible à l'écran : pas d'icône, pas de fond,
+   juste une petite zone cliquable dans le coin, qui se révèle légèrement
+   au survol/focus pour rester accessible. */
 .settings-fab {
+  position: fixed;
+  left: 10px;
+  bottom: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  z-index: 70;
+  opacity: .12;
+  transition: opacity .2s ease, transform .2s ease;
+}
+.settings-fab::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  color: #0a3c5e;
+}
+.settings-fab:hover,
+.settings-fab:focus-visible {
+  opacity: .5;
+  transform: scale(1.15);
+}
+
+/* ------- BOUTON FLOTTANT PLEIN ÉCRAN ------- */
+.fullscreen-fab {
   position: fixed;
   right: 24px;
   bottom: 24px;
@@ -280,19 +315,9 @@ html, body {
   box-shadow: 0 8px 24px rgba(0,0,0,.5);
   transition: transform .2s ease, filter .2s ease;
 }
-.settings-fab svg {
+.fullscreen-fab svg {
   width: 34px;
   height: 34px;
-}
-.settings-fab:hover {
-  transform: rotate(45deg) scale(1.08);
-  filter: brightness(1.2);
-}
-.settings-fab:active { transform: rotate(45deg) scale(.96); }
-
-/* ------- BOUTON FLOTTANT PLEIN ÉCRAN ------- */
-.fullscreen-fab {
-  right: 108px;
 }
 .fullscreen-fab:hover {
   transform: scale(1.08);
@@ -300,19 +325,15 @@ html, body {
 }
 .fullscreen-fab:active { transform: scale(.96); }
 
-/* ------- SWITCH DE LANGUE FR / EN ------- */
+/* ------- SWITCH DE LANGUE FR / EN (intégré à la modale de config) ------- */
 .lang-switch {
-  position: fixed;
-  left: 24px;
-  bottom: 24px;
-  display: flex;
+  display: inline-flex;
   gap: 2px;
   padding: 4px;
   border-radius: 999px;
-  background: #0a3c5e;
-  border: 1px solid rgba(255,255,255,.15);
-  box-shadow: 0 8px 24px rgba(0,0,0,.5);
-  z-index: 70;
+  background: rgba(0,0,0,.25);
+  border: 1px solid rgba(255,255,255,.1);
+  margin-bottom: 16px;
 }
 .lang-btn {
   border: none;
@@ -602,12 +623,34 @@ html, body {
 }
 
 .winner-card {
+  position: relative;
   background: #0a3c5e;
   border: 1px solid rgba(255,255,255,.15);
   border-radius: 14px;
   padding: 32px 40px;
   text-align: center;
   box-shadow: 0 10px 40px rgba(0,0,0,.5);
+}
+
+/* Bouton de fermeture discret : pas d'interaction tactile prévue (la borne
+   se ferme via le bouton USB au clic suivant), ce X reste donc minimal. */
+.winner-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,.35);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px;
+  transition: color .15s, transform .15s;
+}
+.winner-close-btn:hover,
+.winner-close-btn:focus-visible {
+  color: rgba(255,255,255,.85);
+  transform: scale(1.1);
 }
 
 .winner-emoji {
@@ -650,9 +693,8 @@ html, body {
   margin: 12px 0 32px;
 }
 
-#winnerModal .btn.secondary {
-  padding: 14px 32px;
-  font-size: 16px;
-  width: auto;
-  min-width: 200px;
+#winnerModal .winner-close-btn {
+  top: 20px;
+  right: 24px;
+  font-size: 24px;
 }
