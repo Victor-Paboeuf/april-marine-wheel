@@ -301,8 +301,8 @@ html, body {
   position: fixed;
   right: 24px;
   bottom: 24px;
-  width: 72px;
-  height: 72px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   border: 1px solid rgba(255,255,255,.15);
   background: #0a3c5e;
@@ -316,8 +316,8 @@ html, body {
   transition: transform .2s ease, filter .2s ease;
 }
 .fullscreen-fab svg {
-  width: 34px;
-  height: 34px;
+  width: 22px;
+  height: 22px;
 }
 .fullscreen-fab:hover {
   transform: scale(1.08);
